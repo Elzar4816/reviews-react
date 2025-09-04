@@ -12,6 +12,7 @@
   "dependencies": {
     "-": "^0.0.1",
     "@heroicons/react": "^2.2.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/node": "^24.0.1",
     "@types/swiper": "^5.4.3",
     "axios": "^1.10.0",

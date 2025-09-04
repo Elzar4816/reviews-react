@@ -37,6 +37,7 @@ export const Reviews = ({ type }: ReviewsProps) => {
     const [hasMore, setHasMore] = useState(true)
     const [isPageReset, setIsPageReset] = useState(false)
     const limit = 5
+    const [expandedReviews, setExpandedReviews] = useState<{ [key: number]: boolean }>({})
 
     // Fetch logic
     const fetchReviews = async (reset = false) => {
@@ -259,7 +260,35 @@ export const Reviews = ({ type }: ReviewsProps) => {
                                                 </AnimatePresence>
                                             </div>
 
-                                            <p className="text-base text-base-content mb-4 break-words whitespace-pre-line">{review.text}</p>
+                                            <div className="relative">
+                                                <p
+                                                    className={`text-base text-base-content mb-4 break-words whitespace-pre-line transition-all duration-300
+            ${expandedReviews[review.id] ? '' : 'line-clamp-5 overflow-hidden relative'}
+        `}
+                                                >
+                                                    {review.text}
+                                                </p>
+
+                                                {!expandedReviews[review.id] && review.text.length > 300 && (
+                                                    <div
+                                                        className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-base-100 via-base-100/90 to-transparent flex items-end justify-center cursor-pointer"
+                                                        onClick={() => setExpandedReviews(prev => ({ ...prev, [review.id]: true }))}
+                                                    >
+                                                        <span className="text-primary text-sm font-semibold">Прочитать дальше</span>
+                                                    </div>
+                                                )}
+
+                                                {expandedReviews[review.id] && review.text.length > 300 && (
+                                                    <div className="flex justify-center">
+                                                        <button
+                                                            onClick={() => setExpandedReviews(prev => ({ ...prev, [review.id]: false }))}
+                                                            className="text-primary text-sm font-semibold mt-2"
+                                                        >
+                                                            Свернуть
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
 
                                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-4 border-t border-base-300">
                                                 <div className="hidden sm:block tooltip tooltip-right" data-tip="Был ли отзыв полезен?">
